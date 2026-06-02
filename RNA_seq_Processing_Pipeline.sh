@@ -366,4 +366,4 @@ echo "----------------------------------" | tee -a "$log_file"
 done
 
 echo "HTSeq-count run completed."
-done
+
