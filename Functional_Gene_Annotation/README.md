@@ -36,7 +36,7 @@ Source:
 | eggNOG database | v5.0.2 |
 | Python | ≥3.8 |
 
-
+---
 
 ##What the pipeline does
 Creates working directories
@@ -45,20 +45,7 @@ Builds DIAMOND database
 Runs eggNOG-mapper annotation
 Saves results in output folder
 
-##Method Summary
-
-Orthology-based functional annotation of Lasioglossum malachurum was performed using eggNOG-mapper v2.1.12.
-
-Protein sequences (LMAR_OGS_v2.1.1_pep.fasta), downloaded in April 2025, were annotated using eggNOG database v5.0.2.
-
-Sequence similarity searches were performed using DIAMOND v2.0.11 in sensitive mode with an e-value threshold of 0.001.
-
-##Functional annotations include:
-Gene Ontology (GO)
-KEGG Orthology (KO)
-COG functional categories
-Gene descriptions
-
+---
 
 ##Reproducibility
 
