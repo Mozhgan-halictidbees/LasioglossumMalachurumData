@@ -2,7 +2,7 @@
 
 ## Overview
 
-This repository provides the code for functional annotation of *Lasioglossum malachurum* protein sequences using **eggNOG-mapper v2.1.12**.
+This workflow provides the code for functional annotation of *Lasioglossum malachurum* protein sequences using **eggNOG-mapper v2.1.12**.
 
 The pipeline performs orthology-based annotation and assigns:
 - Gene Ontology (GO) terms
@@ -38,7 +38,7 @@ Source:
 
 ---
 
-##What the pipeline does
+## What the pipeline does
 Creates working directories
 Downloads eggNOG database (Hymenoptera, Tax ID: 7399)
 Builds DIAMOND database
@@ -47,7 +47,7 @@ Saves results in output folder
 
 ---
 
-##Reproducibility
+##  Reproducibility
 
 To ensure reproducibility:
 
