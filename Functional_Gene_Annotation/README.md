@@ -39,11 +39,11 @@ Source:
 ---
 
 ## What the pipeline does
-Creates working directories
-Downloads eggNOG database (Hymenoptera, Tax ID: 7399)
-Builds DIAMOND database
-Runs eggNOG-mapper annotation
-Saves results in output folder
+- Creates working directories
+- Downloads eggNOG database (Hymenoptera, Tax ID: 7399)
+- Builds DIAMOND database
+- Runs eggNOG-mapper annotation
+- Saves results in output folder
 
 ---
 
@@ -51,6 +51,6 @@ Saves results in output folder
 
 To ensure reproducibility:
 
-eggNOG-mapper v2.1.12
-DIAMOND v2.0.11
-eggNOG database v5.0.2
+- eggNOG-mapper v2.1.12
+- DIAMOND v2.0.11
+- eggNOG database v5.0.2
