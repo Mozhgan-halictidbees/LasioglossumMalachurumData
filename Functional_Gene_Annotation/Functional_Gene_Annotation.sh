@@ -10,7 +10,7 @@ set -o errtrace
 # USER INPUT
 # ----------------------------
 
-FASTA_FILE="/path/to/LMAR_OGS_v2.1.1_pep.fasta"
+FASTA_FILE="/path/to/LMAL_OGS_v2.1.1_pep.fasta"
 WORKDIR="/path/to/eggnog_project"
 
 THREADS=4

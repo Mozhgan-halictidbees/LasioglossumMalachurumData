@@ -1,4 +1,4 @@
-# README: PCA Analysis of Fat Body and Brain Transcriptomes
+## PCA Analysis of Fat Body and Brain Transcriptomes
 
 ## Overview
 

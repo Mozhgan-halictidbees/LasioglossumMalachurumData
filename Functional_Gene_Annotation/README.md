@@ -16,7 +16,7 @@ The pipeline performs orthology-based annotation and assigns:
 
 Protein FASTA file:
 
-LMAR_OGS_v2.1.1_pep.fasta
+LMAL_OGS_v2.1.1_pep.fasta
 
 Source:
 - Halictid Genome Browser
