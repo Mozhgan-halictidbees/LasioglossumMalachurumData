@@ -7,7 +7,7 @@
 set -euxo pipefail
 set -o errtrace
 # ----------------------------
-# USER INPUT (EDIT ONLY THIS SECTION)
+# USER INPUT
 # ----------------------------
 
 FASTA_FILE="/path/to/LMAR_OGS_v2.1.1_pep.fasta"
