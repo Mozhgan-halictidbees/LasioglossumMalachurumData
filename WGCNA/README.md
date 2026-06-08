@@ -81,7 +81,7 @@ The pipeline generates:
 * Sample clustering dendrograms
 * Gene dendrograms
 * Module color assignments
-* Module–trait heatmaps
+* Module-trait heatmaps
 * Module expression heatmaps
 * Combined publication-quality figures
 

@@ -2,9 +2,9 @@
 
 ## Overview
 
-This directory contains the scripts used to perform a phylostratigraphy analysis of bee gene expression data. The workflow assigns genes to evolutionary strata based on sequence homology and taxonomic lineage information, followed by downstream analyses examining the distribution of differentially expressed genes (DEGs) across evolutionary age classes.
+This directory contains the scripts used to perform a phylostratigraphy analysis of L. malachurum. The workflow assigns genes to evolutionary strata based on sequence homology and taxonomic lineage information, followed by downstream analyses examining the distribution of differentially expressed genes (DEGs) across evolutionary age classes.
 
-The focal species used throughout the analysis is *Apis mellifera*.
+The focal species used for downloading the database is *Apis mellifera*.
 
 ---
 
