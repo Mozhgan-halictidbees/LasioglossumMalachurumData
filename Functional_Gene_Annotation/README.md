@@ -40,7 +40,7 @@ Source:
 
 The workflow:
 - Creates working directories
-- Downloads eggNOG database (Hymenoptera, Tax ID: 7399)
+- Downloads eggNOG database
 - Builds DIAMOND database
 - Runs eggNOG-mapper annotation
 - Saves results in output folder

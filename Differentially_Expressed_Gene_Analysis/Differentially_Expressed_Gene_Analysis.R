@@ -52,6 +52,8 @@ dds <- DESeqDataSetFromMatrix(
 )
 
 # Keep genes with at least 10 counts in at least 5 samples
+# We choose 5 here because our smallest group (queen) has 5 samples. For more information see Pre-filtering in https://bioconductor.org/packages/devel/bioc/vignettes/DESeq2/inst/doc/DESeq2.html
+
 keep <- rowSums(counts(dds) >= 10) >= 5
 dds <- dds[keep, ]
 

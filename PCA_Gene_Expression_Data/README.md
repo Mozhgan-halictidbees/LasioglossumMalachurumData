@@ -2,7 +2,7 @@
 
 ## Overview
 
-This script performs Principal Component Analysis (PCA) on RNA-seq gene expression data from fat body and brain tissues. The analysis uses the 500 most variable genes identified from normalized count data and applies Variance Stabilizing Transformation (VST) on all genes  prior to PCA.
+This directory  performs Principal Component Analysis (PCA) on RNA-seq gene expression data from fat body and brain tissues. The analysis uses the 500 most variable genes identified from normalized count data and applies Variance Stabilizing Transformation (VST) on all genes  prior to PCA.
 
 
 The workflow generates:
@@ -16,7 +16,7 @@ The workflow generates:
 
 ## Required R Packages
 
-
+```r
 library(DESeq2)
 library(ggplot2)
 library(dplyr)
@@ -70,8 +70,8 @@ For each tissue:
 
 rowSums(counts >= 10) >= 5
 
-
-Genes must have at least 10 counts in at least 5 samples. The smallest group in our case is queen which has 5 samples. 
+# We choose 5 here because our smallest group (queen) has 5 samples. For more information see Pre-filtering in https://bioconductor.org/packages/devel/bioc/vignettes/DESeq2/inst/doc/DESeq2.html
+ 
 
 3. DESeq2 normalization is performed.
 4. Variance is calculated across normalized counts.
@@ -79,19 +79,7 @@ Genes must have at least 10 counts in at least 5 samples. The smallest group in 
 
 ---
 
-### 2. Variance Stabilizing Transformation (VST)
-
-Filtered count matrices are transformed using:
-
-
-vst(dds, blind = FALSE)
-
-
-The running times are shorter when using blind=FALSE.
-
----
-
-### 3. Principal Component Analysis
+### 2. Principal Component Analysis
 
 PCA is performed using:
 
@@ -107,7 +95,7 @@ The first two principal components (PC1 and PC2) are plotted.
 
 ---
 
-### 4. Sample Annotation
+### 3. Sample Annotation
 
 Here we are showing 2 egg-laying workers as A and B to differentiate them from other samples.
 

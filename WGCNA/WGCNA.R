@@ -2,7 +2,7 @@
 
 ####################################
 # Set working directory
-setwd("C:/Users/Mozhgan/Desktop/WGCNA_MOM/eye/malachurum_brain/mal_mozhgan_excluding_egg_laying_workers_brain")
+setwd("C:/Users/Mozhgan/")
 
 # Load packages
 library(DESeq2)
@@ -299,7 +299,7 @@ dev.off()
 
 ####################################
 # Set working directory
-setwd("C:/Users/Mozhgan/Desktop/WGCNA_MOM/eye/malachurum_fatbody/mal_mozhgan_excluding_2_egg_laying_workers")
+setwd("C:/Users/Mozhgan/...")
 
 # Load packages
 library(DESeq2)
@@ -744,7 +744,7 @@ labeledHeatmap(
 
 ####################################
 # Set working directory
-setwd("C:/Users/Mozhgan/Desktop/WGCNA_MOM/eye/malachurum_brain/mal_mozhgan_excluding_egg_laying_workers_brain")
+setwd("C:/Users/Mozhgan/.....")
 
 # Load packages
 library(DESeq2)
@@ -1041,7 +1041,7 @@ dev.off()
 
 ####################################
 # Set working directory
-setwd("C:/Users/Mozhgan/Desktop/WGCNA_MOM/eye/malachurum_fatbody/mal_mozhgan_excluding_2_egg_laying_workers")
+setwd("C:/Users/Mozhgan/....")
 
 # Load packages
 library(DESeq2)

@@ -2,7 +2,7 @@
 
 ## Overview
 
-This workflow performs weighted gene co-expression network analysis (WGCNA) on RNA-seq data from brain and fat body tissues of *Lasioglossum malachurum*.
+This directory  performs weighted gene co-expression network analysis (WGCNA) on RNA-seq data from brain and fat body tissues of Lasioglossum malachurum. 
 
 The pipeline combines DESeq2 normalization with WGCNA network construction to identify co-expressed gene modules associated with social phenotypes and biological traits.
 
@@ -39,7 +39,6 @@ Parameters:
 | Parameter           | Value  |
 | ------------------- | ------ |
 | Network type        | Signed |
-| Soft power          | 16     |
 | Minimum module size | 30     |
 | Merge cut height    | 0.25   |
 
@@ -51,14 +50,14 @@ Module eigengenes are correlated with trait data using biweight midcorrelation (
 
 Outputs include:
 
-* Module–trait correlation matrices
+* Module-trait correlation matrices
 * P-values
-* Heatmaps of module–trait relationships
+* Heatmaps of module-trait relationships
 
 Generated figures:
 
-* Brain module–trait heatmap
-* Fat body module–trait heatmap
+* Brain module-trait heatmap
+* Fat body module-trait heatmap
 * Combined heatmap figure
 
 ---
