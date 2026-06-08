@@ -44,7 +44,7 @@ Parameters:
 
 ---
 
-### 3. Module–Trait Relationships
+### 3. Module-Trait Relationships
 
 Module eigengenes are correlated with trait data using biweight midcorrelation (bicor).
 
