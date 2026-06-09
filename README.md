@@ -18,7 +18,7 @@ Identification of differentially expressed genes between biological groups using
 ### Functional_Gene_Annotation
 Functional characterization of genes through Gene Ontology (GO), KEGG pathway annotation, description, and potential gene code.
 
-###Functional_Enrichment_Analysis
+### Functional_Enrichment_Analysis
 Functional enrichment analysis was performed on differentially expressed genes (DEGs) using topGO to identify significantly enriched Gene Ontology (GO) terms relative to a background gene set.
 
 ### WGCNA
