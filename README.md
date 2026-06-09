@@ -16,7 +16,10 @@ Principal Component Analysis (PCA) of gene expression data is used to assess sam
 Identification of differentially expressed genes between biological groups using RNA-seq count data.
 
 ### Functional_Gene_Annotation
-Functional characterization of genes through Gene Ontology (GO), KEGG pathway annotation, and enrichment analyses. These scripts help interpret the biological significance of differentially expressed genes and network modules.
+Functional characterization of genes through Gene Ontology (GO), KEGG pathway annotation, description, and potential gene code.
+
+###Functional_Enrichment_Analysis
+Functional enrichment analysis was performed on differentially expressed genes (DEGs) using topGO to identify significantly enriched Gene Ontology (GO) terms relative to a background gene set.
 
 ### WGCNA
 Weighted Gene Co-expression Network Analysis (WGCNA) is used to identify modules of co-expressed genes and evaluate their associations with biological traits of interest.

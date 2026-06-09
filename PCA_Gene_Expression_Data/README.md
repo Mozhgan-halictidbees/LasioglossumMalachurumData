@@ -70,7 +70,7 @@ For each tissue:
 
 rowSums(counts >= 10) >= 5
 
-# We choose 5 here because our smallest group (queen) has 5 samples. For more information see Pre-filtering in https://bioconductor.org/packages/devel/bioc/vignettes/DESeq2/inst/doc/DESeq2.html
+#### We choose 5 here because our smallest group (queen) has 5 samples. For more information see Pre-filtering in https://bioconductor.org/packages/devel/bioc/vignettes/DESeq2/inst/doc/DESeq2.html
  
 
 3. DESeq2 normalization is performed.

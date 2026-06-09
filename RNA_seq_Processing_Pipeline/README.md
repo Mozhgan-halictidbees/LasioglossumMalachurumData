@@ -39,11 +39,4 @@ The following tools must be installed:
 - HISAT2
 - Samtools
 - HTSeq-count
-- Bash
-- awk, grep, bc
 
-Most tools can be installed using conda:
-
-```bash
-conda create -n rnaseq_env -c bioconda fastqc sortmerna trimmomatic hisat2 samtools htseq
-conda activate rnaseq_env

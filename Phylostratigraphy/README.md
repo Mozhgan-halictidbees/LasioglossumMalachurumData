@@ -146,5 +146,4 @@ The workflow produces:
 - Gene age assignments
 - Gene lists for each phylostratum
 - DEG overlap summaries
-- Publication-ready figures
 - Chi-square test results
