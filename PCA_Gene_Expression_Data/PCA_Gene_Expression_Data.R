@@ -1,6 +1,5 @@
 #########################################
 # PCA Analysis for Fat Body and Brain
-# Top 500 genes selected from the SAME dataset
 #########################################
 
 library(DESeq2)
@@ -386,20 +385,4 @@ ggsave(
   
 )
 
-cat("\n")
-cat("--------------------------------------------\n")
-cat("Analysis completed successfully.\n")
-cat("--------------------------------------------\n")
-cat("Top 500 gene lists saved as:\n")
-cat("  FatBody_Top500Genes.txt\n")
-cat("  Brain_Top500Genes.txt\n\n")
 
-cat("Individual PCA plots:\n")
-cat("  FatBody_PCA.pdf\n")
-cat("  Brain_PCA.pdf\n\n")
-
-cat("Combined publication figure:\n")
-cat("  Combined_PCA_vst_highres.pdf\n")
-cat("  Combined_PCA_vst_highres.png\n")
-cat("  Combined_PCA_vst_highres.jpg\n")
-cat("--------------------------------------------\n")
