@@ -14,7 +14,7 @@ library(patchwork)
 # ---------------------------
 # Step 1: Select top 500 variable genes
 # ---------------------------
-setwd("C:/Users/Mozhgan/.....")  # 
+setwd("C:/Users/Mozhgan/.....")  
 
 combined_counts_fatbody <- read.csv("./raw_fatbody_mal_mozhgan.csv", header = TRUE, row.names = 1)
 phenotype_data_fatbody <- read.csv("./ttype_fatbody.csv", header = TRUE, row.names = 1)
@@ -32,23 +32,7 @@ gene_variances_fatbody <- apply(norm_counts_fatbody, 1, var)
 top500_genes_fatbody <- names(sort(gene_variances_fatbody, decreasing = TRUE))[1:500]
 cat("Top 500 genes selected for PCA (Fat body)\n")
 
-# ---------------------------
-# Step 2: Do VST + PCA (malachurum directory)
-# ---------------------------
-setwd("C:/Users/Mozhgan/.....")
 
-
-combined_counts_fatbody <- read.csv("./raw_fatbody_mal_mozhgan.csv", header = TRUE, row.names = 1)
-phenotype_data_fatbody <- read.csv("./ttype_fatbody.csv", header = TRUE, row.names = 1)
-
-dds_fatbody <- DESeqDataSetFromMatrix(countData = combined_counts_fatbody,
-                                      colData = phenotype_data_fatbody,
-                                      design = ~ phenotype)
-
-keep <- rowSums(counts(dds_fatbody) >= 10) >= 5
-dds_fatbody <- dds_fatbody[keep,]
-
-dds_fatbody <- DESeq(dds_fatbody)
 
 dds_vst_fatbody <- vst(dds_fatbody, blind = TRUE)
 vst_counts_fatbody <- assay(dds_vst_fatbody)
@@ -86,7 +70,7 @@ ggsave("PCA_top500_vst_fatbody.pdf", plot = p_pca_vst_fatbody, width = 7, height
 # ---------------------------
 # Step 1: Select top 500 variable genes 
 # ---------------------------
-setwd("C:/Users/Mozhgan/......")
+setwd("C:/Users/Mozhgan/.....")
 
 combined_counts_brain <- read.csv("./raw_brain_mal_mozhgan.csv", header = TRUE, row.names = 1)
 phenotype_data_brain <- read.csv("./ttype_brain.csv", header = TRUE, row.names = 1)
@@ -104,22 +88,6 @@ gene_variances_brain <- apply(norm_counts_brain, 1, var)
 top500_genes_brain <- names(sort(gene_variances_brain, decreasing = TRUE))[1:500]
 cat("Top 500 genes selected for PCA (Brain)\n")
 
-# ---------------------------
-# Step 2: Do VST + PCA (malachurum directory)
-# ---------------------------
-setwd("C:/Users/Mozhgan/........")
-
-combined_counts_brain <- read.csv("./raw_brain_mal_mozhgan.csv", header = TRUE, row.names = 1)
-phenotype_data_brain <- read.csv("./ttype_brain.csv", header = TRUE, row.names = 1)
-
-dds_brain <- DESeqDataSetFromMatrix(countData = combined_counts_brain,
-                                    colData = phenotype_data_brain,
-                                    design = ~ phenotype)
-
-keep <- rowSums(counts(dds_brain) >= 10) >= 5
-dds_brain <- dds_brain[keep,]
-
-dds_brain <- DESeq(dds_brain)
 
 dds_vst_brain <- vst(dds_brain, blind = TRUE)
 vst_counts_brain <- assay(dds_vst_brain)
@@ -145,6 +113,7 @@ p_pca_vst_brain <- ggplot(pca_vst_df_brain, aes(x = PC1, y = PC2, color = Phenot
        x = paste0("PC1 (", round(summary(pca_vst_brain)$importance[2,1] * 100, 1), "%)"),
        y = paste0("PC2 (", round(summary(pca_vst_brain)$importance[2,2] * 100, 1), "%)"))
 
+print(p_pca_vst_brain)
 ggsave("PCA_top500_vst_brain.jpg", plot = p_pca_vst_brain, width = 7, height = 5, dpi = 300)
 ggsave("PCA_top500_vst_brain.pdf", plot = p_pca_vst_brain, width = 7, height = 5)
 
