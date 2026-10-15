@@ -1,279 +1,128 @@
-#########################################
-# PCA Analysis for Fat Body and Brain
-# Top gene selection done in NMDS directory
-#########################################
 
+
+
+## PCA Analysis of Fat Body and Brain Transcriptomes
+
+## Overview
+
+This directory  performs Principal Component Analysis (PCA) on RNA-seq gene expression data from fat body and brain tissues. The analysis uses the 500 most variable genes identified from normalized count data and applies Variance Stabilizing Transformation (VST) on all genes  prior to PCA.
+
+
+The workflow generates:
+
+* PCA plots for fat body samples
+* PCA plots for brain samples
+* Combined publication-quality PCA figures
+
+
+---
+
+## Required R Packages
+
+```r
 library(DESeq2)
 library(ggplot2)
 library(dplyr)
 library(patchwork)
+library(cowplot)
 
-# ======================================
-# === 1. FAT BODY
-# ======================================
+```
+---
 
-# ---------------------------
-# Step 1: Select top 500 variable genes (NMDS directory)
-# ---------------------------
-setwd("C:/Users/Mozhgan/.....")  # <-- NMDS working directory
+## Input Files
 
-combined_counts_fatbody <- read.csv("./raw_fatbody_mal_mozhgan.csv", header = TRUE, row.names = 1)
-phenotype_data_fatbody <- read.csv("./ttype_fatbody.csv", header = TRUE, row.names = 1)
+### Fat Body Data
 
-dds_fatbody <- DESeqDataSetFromMatrix(countData = combined_counts_fatbody,
-                                      colData = phenotype_data_fatbody,
-                                      design = ~ phenotype)
+| File                          | Description                                      |
+| ----------------------------- | ------------------------------------------------ |
+| `raw_fatbody_mal_mozhgan.csv` | Raw count matrix (genes × samples)               |
+| `ttype_fatbody.csv`           | Sample metadata containing phenotype information |
 
-keep <- rowSums(counts(dds_fatbody) >= 10) >= 5
-dds_fatbody <- dds_fatbody[keep,]
+### Brain Data
 
-dds_fatbody <- DESeq(dds_fatbody)
-norm_counts_fatbody <- counts(dds_fatbody, normalized = TRUE)
-gene_variances_fatbody <- apply(norm_counts_fatbody, 1, var)
-top500_genes_fatbody <- names(sort(gene_variances_fatbody, decreasing = TRUE))[1:500]
-cat("Top 500 genes selected for PCA (Fat body)\n")
+| File                        | Description                                      |
+| --------------------------- | ------------------------------------------------ |
+| `raw_brain_mal_mozhgan.csv` | Raw count matrix (genes × samples)               |
+| `ttype_brain.csv`           | Sample metadata containing phenotype information |
 
-# ---------------------------
-# Step 2: Do VST + PCA (malachurum directory)
-# ---------------------------
-setwd("C:/Users/Mozhgan/.....")
+### Metadata Requirements
 
+The metadata files must contain a column named:
+phenotype
 
-combined_counts_fatbody <- read.csv("./raw_fatbody_mal_mozhgan.csv", header = TRUE, row.names = 1)
-phenotype_data_fatbody <- read.csv("./ttype_fatbody.csv", header = TRUE, row.names = 1)
 
-dds_fatbody <- DESeqDataSetFromMatrix(countData = combined_counts_fatbody,
-                                      colData = phenotype_data_fatbody,
-                                      design = ~ phenotype)
+with sample groups such as:
 
-keep <- rowSums(counts(dds_fatbody) >= 10) >= 5
-dds_fatbody <- dds_fatbody[keep,]
+queen
+worker
+foundress
 
-dds_fatbody <- DESeq(dds_fatbody)
 
-dds_vst_fatbody <- vst(dds_fatbody, blind = TRUE)
-vst_counts_fatbody <- assay(dds_vst_fatbody)
-vst_counts_top500_fatbody <- vst_counts_fatbody[top500_genes_fatbody, ]
+Row names of the metadata files must match the sample names in the count matrices.
 
-pca_vst_fatbody <- prcomp(t(vst_counts_top500_fatbody), scale. = TRUE)
+---
 
-pca_vst_df_fatbody <- data.frame(pca_vst_fatbody$x,
-                                 Phenotype = phenotype_data_fatbody$phenotype,
-                                 Sample = rownames(phenotype_data_fatbody))
+## Analysis Workflow
 
-pca_vst_df_fatbody$Label <- ifelse(pca_vst_df_fatbody$Sample == "X109FmalW83", "A",
-                                   ifelse(pca_vst_df_fatbody$Sample == "X128FmalW99", "B", ""))
+### 1. Selection of Highly Variable Genes
 
-p_pca_vst_fatbody <- ggplot(pca_vst_df_fatbody, aes(x = PC1, y = PC2, color = Phenotype)) +
-  geom_point(size = 4) +
-  geom_text(aes(label = Label), vjust = -1.2, size = 5, color = "black", fontface = "bold") +
-  theme_minimal(base_size = 14) +
-  scale_color_manual(values = c("queen" = "dodgerblue",
-                                "worker" = "#ff1493",
-                                "foundress" = "#969696")) +
-  labs(title = "Fat body transcriptome",
-       x = paste0("PC1 (", round(summary(pca_vst_fatbody)$importance[2,1] * 100, 1), "%)"),
-       y = paste0("PC2 (", round(summary(pca_vst_fatbody)$importance[2,2] * 100, 1), "%)"))
-print(p_pca_vst_fatbody)
+For each tissue:
 
-ggsave("PCA_top500_vst_fatbody.jpg", plot = p_pca_vst_fatbody, width = 7, height = 5, dpi = 300)
-ggsave("PCA_top500_vst_fatbody.pdf", plot = p_pca_vst_fatbody, width = 7, height = 5)
+1. Raw count data are loaded.
+2. Low-expression genes are filtered:
 
+rowSums(counts >= 10) >= 5
 
-# ======================================
-# === 2. BRAIN
-# ======================================
+#### We choose 5 here because our smallest group (queen) has 5 samples. For more information see Pre-filtering in https://bioconductor.org/packages/devel/bioc/vignettes/DESeq2/inst/doc/DESeq2.html
 
-# ---------------------------
-# Step 1: Select top 500 variable genes (NMDS directory)
-# ---------------------------
-setwd("C:/Users/Mozhgan/......")
 
-combined_counts_brain <- read.csv("./raw_brain_mal_mozhgan.csv", header = TRUE, row.names = 1)
-phenotype_data_brain <- read.csv("./ttype_brain.csv", header = TRUE, row.names = 1)
+3. DESeq2 normalization is performed.
+4. Variance is calculated across normalized counts.
+5. The 500 genes with the highest variance are selected for PCA.
 
-dds_brain <- DESeqDataSetFromMatrix(countData = combined_counts_brain,
-                                    colData = phenotype_data_brain,
-                                    design = ~ phenotype)
+---
 
-keep <- rowSums(counts(dds_brain) >= 10) >= 5
-dds_brain <- dds_brain[keep,]
+### 2. Principal Component Analysis
 
-dds_brain <- DESeq(dds_brain)
-norm_counts_brain <- counts(dds_brain, normalized = TRUE)
-gene_variances_brain <- apply(norm_counts_brain, 1, var)
-top500_genes_brain <- names(sort(gene_variances_brain, decreasing = TRUE))[1:500]
-cat("Top 500 genes selected for PCA (Brain)\n")
+PCA is performed using:
 
-# ---------------------------
-# Step 2: Do VST + PCA (malachurum directory)
-# ---------------------------
-setwd("C:/Users/Mozhgan/........")
+prcomp(t(vst_counts_top500), scale. = TRUE)
 
-combined_counts_brain <- read.csv("./raw_brain_mal_mozhgan.csv", header = TRUE, row.names = 1)
-phenotype_data_brain <- read.csv("./ttype_brain.csv", header = TRUE, row.names = 1)
 
-dds_brain <- DESeqDataSetFromMatrix(countData = combined_counts_brain,
-                                    colData = phenotype_data_brain,
-                                    design = ~ phenotype)
+where:
 
-keep <- rowSums(counts(dds_brain) >= 10) >= 5
-dds_brain <- dds_brain[keep,]
+* Rows = samples
+* Columns = genes
 
-dds_brain <- DESeq(dds_brain)
+The first two principal components (PC1 and PC2) are plotted.
 
-dds_vst_brain <- vst(dds_brain, blind = TRUE)
-vst_counts_brain <- assay(dds_vst_brain)
-vst_counts_top500_brain <- vst_counts_brain[top500_genes_brain, ]
+---
 
-pca_vst_brain <- prcomp(t(vst_counts_top500_brain), scale. = TRUE)
+### 3. Sample Annotation
 
-pca_vst_df_brain <- data.frame(pca_vst_brain$x,
-                               Phenotype = phenotype_data_brain$phenotype,
-                               Sample = rownames(phenotype_data_brain))
+Here we are showing 2 egg-laying workers as A and B to differentiate them from other samples.
 
-pca_vst_df_brain$Label <- ifelse(pca_vst_df_brain$Sample == "X87BmalW83", "A",
-                                 ifelse(pca_vst_df_brain$Sample == "X125BmalW99", "B", ""))
+#### Fat Body
 
-p_pca_vst_brain <- ggplot(pca_vst_df_brain, aes(x = PC1, y = PC2, color = Phenotype)) +
-  geom_point(size = 4) +
-  geom_text(aes(label = Label), vjust = -1.2, size = 5, color = "black", fontface = "bold") +
-  theme_minimal(base_size = 14) +
-  scale_color_manual(values = c("queen" = "dodgerblue",
-                                "worker" = "#ff1493",
-                                "foundress" = "#969696")) +
-  labs(title = "Brain transcriptome",
-       x = paste0("PC1 (", round(summary(pca_vst_brain)$importance[2,1] * 100, 1), "%)"),
-       y = paste0("PC2 (", round(summary(pca_vst_brain)$importance[2,2] * 100, 1), "%)"))
+| Sample ID   | Label |
+| ----------- | ----- |
+| X109FmalW83 | A     |
+| X128FmalW99 | B     |
 
-ggsave("PCA_top500_vst_brain.jpg", plot = p_pca_vst_brain, width = 7, height = 5, dpi = 300)
-ggsave("PCA_top500_vst_brain.pdf", plot = p_pca_vst_brain, width = 7, height = 5)
+#### Brain
 
+| Sample ID   | Label |
+| ----------- | ----- |
+| X87BmalW83  | A     |
+| X125BmalW99 | B     |
 
-# ======================================
-# === 3. Combine Plots
-# ======================================
-p_pca_vst_fatbody <- p_pca_vst_fatbody + theme(legend.position = "bottom")
-p_pca_vst_brain <- p_pca_vst_brain + theme(legend.position = "none")
+---
 
-combined_pca <- p_pca_vst_fatbody + p_pca_vst_brain +
-  plot_annotation(title = "PCA plots of Fat Body and Brain Transcriptomes") &
-  theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 16))
-print(combined_pca)
+## Notes
 
-ggsave("Combined_PCA_vst.jpg", plot = combined_pca, width = 12, height = 6, dpi = 300)
-ggsave("Combined_PCA_vst.pdf", plot = combined_pca, width = 12, height = 6)
-
-
-###################publication
-# ======================================
-# === 3. Combine Plots (side-by-side, legend centered)
-# ======================================
-
-library(patchwork)
-
-# Remove legend from brain, keep it in fat body
-p_pca_vst_fatbody <- p_pca_vst_fatbody + theme(legend.position = "right",
-                                               legend.title = element_blank(),
-                                               legend.text = element_text(size = 12))
-p_pca_vst_brain <- p_pca_vst_brain + theme(legend.position = "none")
-
-# Create an empty plot for spacing (optional)
-empty <- ggplot() + theme_void()
-
-# Arrange plots: fatbody | legend | brain
-combined_pca <- (p_pca_vst_fatbody + plot_spacer() + p_pca_vst_brain) + 
-  plot_layout(ncol = 3, widths = c(4, 1, 4), guides = "collect") & 
-  theme(legend.position = "right")  # legend will appear in middle column
-
-# Remove main title
-combined_pca <- combined_pca & theme(plot.title = element_blank())
-print(combined_pca)
-# Save
-ggsave("Combined_PCA_vst.jpg", plot = combined_pca, width = 14, height = 6, dpi = 300)
-ggsave("Combined_PCA_vst.pdf", plot = combined_pca, width = 14, height = 6)
-
-
-
-
-
-
-
-
-
-
-library(patchwork)
-library(cowplot)  # for get_legend
-
-# Extract the legend from the fatbody plot
-legend <- get_legend(
-  p_pca_vst_fatbody + theme(legend.position = "right",
-                            legend.title = element_blank(),
-                            legend.text = element_text(size = 12))
-)
-
-# Remove legends from both plots
-p_pca_vst_fatbody_clean <- p_pca_vst_fatbody + theme(legend.position = "none") +
-  labs(title = "a) Fat bodies")
-p_pca_vst_brain_clean <- p_pca_vst_brain + theme(legend.position = "none") +
-  labs(title = "b) Brains")
-
-# Combine plots: fatbody | legend | brain
-combined_pca <- plot_grid(
-  p_pca_vst_fatbody_clean,
-  legend,
-  p_pca_vst_brain_clean,
-  ncol = 3,
-  rel_widths = c(4, 1, 4),
-  align = "v"
-)
-print(combined_pca)
-# Save
-ggsave("Combined_PCA_vst.jpg", plot = combined_pca, width = 14, height = 6, dpi = 300)
-ggsave("Combined_PCA_vst.pdf", plot = combined_pca, width = 14, height = 6)
-
-# Center titles
-p_pca_vst_fatbody_clean <- p_pca_vst_fatbody_clean + 
-  theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 14))
-
-p_pca_vst_brain_clean <- p_pca_vst_brain_clean + 
-  theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 14))
-combined_pca <- plot_grid(
-  p_pca_vst_fatbody_clean,
-  legend,
-  p_pca_vst_brain_clean,
-  ncol = 3,
-  rel_widths = c(4, 1, 4),
-  align = "v"
-)
-
-ggsave("Combined_PCA_vst.jpg", plot = combined_pca, width = 14, height = 6, dpi = 300)
-ggsave("Combined_PCA_vst.pdf", plot = combined_pca, width = 14, height = 6)
-
-# ======================================
-# === Save Final Combined PCA (High Resolution)
-# ======================================
-
-# Define output filenames
-pdf_file <- "Combined_PCA_vst_highres.pdf"
-png_file <- "Combined_PCA_vst_highres.png"
-
-# Save as high-resolution PDF (vector format, no pixelation)
-ggsave(filename = pdf_file,
-       plot = combined_pca,
-       width = 14,
-       height = 6,
-       units = "in",
-       device = cairo_pdf,  # ensures text is embedded properly
-       dpi = 600)           # not necessary for PDF, but harmless
-
-# Save as high-resolution PNG (for digital display)
-ggsave(filename = png_file,
-       plot = combined_pca,
-       width = 14,
-       height = 6,
-       units = "in",
-       dpi = 600,
-       type = "cairo-png")  # improves text rendering
-getwd()
+* The PCA is based only on the 500 most variable genes.
+* Gene selection is performed independently for fat body and brain datasets.
+* DESeq2 normalization is applied prior to variance calculation.
+* VST-transformed counts are used for PCA.
+~
 
